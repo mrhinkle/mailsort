@@ -36,6 +36,10 @@ something". Those need the agent. Never export a rule that deletes or marks spam
 
 ## Compile
 
+0. **List what already exists** (`GMAIL_LIST_FILTERS` on Gmail, `/me/mailFolders/inbox/messageRules`
+   on Graph; both are read-only). Skip any candidate the client already routes, and note filters
+   that label without archiving when the owner's policy is to archive. This call also tells you
+   whether the connection has the settings scope at all.
 1. Load the override layer. Collect candidates by the tests above.
 2. Collapse duplicates: several addresses on one domain with the same action become one domain
    rule only if every sender on that domain has the same category; otherwise keep them separate.

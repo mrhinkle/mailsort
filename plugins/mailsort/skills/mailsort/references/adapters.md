@@ -29,9 +29,11 @@ Labels: `GMAIL_LIST_LABELS` to map names to ids (re-list every run; ids differ p
 `GMAIL_CREATE_LABEL` only with the owner's consent during setup. Outlook: `OUTLOOK_LIST_MAIL_FOLDERS`.
 
 **Not on this path, by design:** `GMAIL_SEND_DRAFT`, `GMAIL_REPLY_TO_THREAD`, `OUTLOOK_SEND_DRAFT`,
-any delete or spam call. The owner sends. Gmail *filters* (`GMAIL_CREATE_FILTER`) need the
-`gmail.settings.basic` scope that Composio's default OAuth app lacks (403); use `/mailsort:rules`
-to export an import file instead.
+any delete or spam call. The owner sends. Gmail *filters* need the `gmail.settings.basic` scope,
+which a connection may or may not carry. Test read-only first with `GMAIL_LIST_FILTERS`: if it
+returns the filter list, `GMAIL_CREATE_FILTER` will work on that connection (still ask the owner
+before creating one, since a filter is standing configuration); if it returns 403, use
+`/mailsort:rules` to export an import file instead.
 
 Batch gotchas (both providers): a batch success response is acceptance-only and silently skips bad
 ids, so verify by re-querying; persist page tokens across pages or you re-process page 1 forever;

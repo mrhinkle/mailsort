@@ -1,0 +1,22 @@
+{
+  "name": "mailsort",
+  "owner": { "name": "Mark R. Hinkle", "url": "https://github.com/mrhinkle" },
+  "metadata": {
+    "description": "mailsort: a portable, provider-neutral email triage plugin for Claude Code and Cowork. Gmail and Microsoft 365, Composio or native connectors.",
+    "version": "1.0.0"
+  },
+  "plugins": [
+    {
+      "name": "mailsort",
+      "source": "./plugins/mailsort",
+      "description": "Sort any inbox into ten stable categories, surface only what a human must answer, draft context-checked replies, brief the owner each morning, sweep backlogs, and export client-side filter rules. Never sends or deletes.",
+      "version": "1.0.0",
+      "author": { "name": "Mark R. Hinkle", "url": "https://github.com/mrhinkle" },
+      "homepage": "https://github.com/mrhinkle/mailsort",
+      "repository": "https://github.com/mrhinkle/mailsort",
+      "license": "MIT",
+      "keywords": ["email", "gmail", "outlook", "inbox", "triage", "productivity"],
+      "category": "productivity"
+    }
+  ]
+}

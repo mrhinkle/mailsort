@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.1.0 — 2026-11-01
+
+- `mailsort-draftreply` gains a **Draft audit** procedure for existing drafts: SUPERSEDED, EMPTY,
+  DUP, CROSS-MAILBOX DUP, THIRD-PARTY, STALE INBOUND, AGING, LIVE. Reports with compose links;
+  deletion stays with the owner (no DELETE verb, on purpose).
+- New `skills/mailsort/references/lessons.md`: the plugin's own dated, generic lessons log, with
+  the promotion protocol (overrides log → lessons.md → pull request). Seeded from the first full
+  three-mailbox audit (83 drafts, 28 stale).
+- Core self-improvement protocol gains step 6: read and append the shared lessons file.
+
 ## 1.0.2 — 2026-11-01
 
 Correction: a successful `GMAIL_LIST_FILTERS` does not prove `GMAIL_CREATE_FILTER` will work

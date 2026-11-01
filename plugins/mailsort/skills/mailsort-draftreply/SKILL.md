@@ -7,8 +7,9 @@ description: >
   (Gmail or Microsoft 365); part of the `mailsort` family. Use whenever someone says "draft
   replies", "draft a reply to X", "draft these", "write back to them", "answer the needs-reply
   list", "reply drafts for the briefing", or asks why a suggested reply was generic. Also use it
-  to re-check a draft that already exists before the owner sends it. It saves drafts for the owner
-  to review; it never sends. Defer to `mailsort-needsreply` for deciding WHICH threads need a
+  to re-check a draft that already exists before the owner sends it, and to audit the drafts folder
+  ("audit my drafts", "are my drafts stale", "which drafts are redundant", "clean up drafts"). It
+  saves drafts for the owner to review; it never sends and never deletes. Defer to `mailsort-needsreply` for deciding WHICH threads need a
   reply and for the draft tiers; this skill owns HOW each draft is researched and written.
 ---
 
@@ -109,6 +110,34 @@ Open:    [TK: …] items the owner must fill before sending
 
 Order cards by age of the oldest unanswered inbound. Lead the report with one line of totals:
 `5 threads — 2 drafted, 2 need you, 1 skipped`. A thread with no card was not processed; say so.
+
+## Draft audit (existing drafts)
+
+Run this when asked to check, de-duplicate or clean up drafts, and at the start of any run that
+will create drafts (it is Stage 1 check S3 done for the whole folder at once). It reads and
+reports; the owner deletes.
+
+1. List every draft in every owned mailbox with full bodies. Group by thread.
+2. Fetch each thread once (parallel) and sort messages by time, ignoring `DRAFT` messages that also
+   carry `TRASH` — those are deleted drafts the API still returns.
+3. Classify each draft, first match wins:
+
+| Class | Test | Report as |
+|---|---|---|
+| **SUPERSEDED** | a non-draft message from the owner or a named delegate is newer than the draft | delete candidate: who answered, when |
+| **EMPTY** | body minus signature block and quoted header is under ~25 characters | delete candidate: leftover |
+| **DUP** | more than one draft on the thread | keep newest with a body; the rest are delete candidates |
+| **CROSS-MAILBOX DUP** | same recipient drafted from two owned mailboxes | keep the one in the mailbox that owns the relationship (overrides) |
+| **THIRD-PARTY** | carries another tool's marker | report only; never edit or delete |
+| **STALE INBOUND** | a newer inbound arrived after the draft and asks something the draft does not answer | update candidate: re-run Stage 2 and rewrite |
+| **AGING** | live draft older than 72 hours | report by name and age |
+| **LIVE** | none of the above | nothing to do |
+
+4. Report one table per mailbox, grouped by class, each row with a compose link. Lead with the
+   totals: `83 drafts — 28 delete candidates, 3 to update, 3 third-party, 49 live`.
+5. Deletion is the owner's, in the client. The adapter contract has no DELETE verb on purpose.
+
+Lessons from real audits live in `../mailsort/references/lessons.md` under *Draft audit*.
 
 ## Idempotency and aging
 

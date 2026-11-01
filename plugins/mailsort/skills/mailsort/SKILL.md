@@ -111,6 +111,9 @@ This skill is meant to be corrected, and corrections are the point.
    that way — prose degrades, tests don't.
 5. **Review on a cadence.** Monthly: count corrections per category. The category with the most
    corrections has the weakest rule — fix that one first, and record what changed.
+6. **Keep the shared memory.** `references/lessons.md` (next to this file) is the plugin's own
+   dated log of generic rules. Read it before a run; append to it when a rule stops being about one
+   mailbox; send it upstream as a pull request. Private rules never go there.
 
 ## Overrides
 

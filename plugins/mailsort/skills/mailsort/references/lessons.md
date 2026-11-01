@@ -70,3 +70,16 @@ Sections mirror the skills. Newest entry last within a section.
 - 2026-11-01 | before creating any draft, read the shared memory (or the log) for runs earlier the
   same day → a thread an earlier run flagged for the owner is never drafted by a later run | two
   runs disagreed on a form whose sender domain did not match its name; the second one drafted it
+
+## Drafting
+
+- 2026-11-01 | the owner's email register is usually far shorter than their public voice → model a
+  draft on their last three sent replies to that person or to anyone, not on a long-form voice
+  guide | a voice skill built from talks produced drafts twice the length the owner sends
+- 2026-11-01 | a named delegate the owner routinely adds themselves (overrides name them) may be
+  cc'd on a draft that hands them scheduling or logistics, even if they were not on the thread →
+  say so in the report each time | the general "never add a recipient" rule protects against
+  strangers, not against the owner's own standing pattern
+- 2026-11-01 | when the owner asks for drafts on never-unattended topics (pricing, commitments),
+  draft the words and leave the number or the date as a `[TK: ...]` → the decision stays theirs
+  while the typing is done

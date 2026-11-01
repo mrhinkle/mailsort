@@ -29,11 +29,11 @@ Labels: `GMAIL_LIST_LABELS` to map names to ids (re-list every run; ids differ p
 `GMAIL_CREATE_LABEL` only with the owner's consent during setup. Outlook: `OUTLOOK_LIST_MAIL_FOLDERS`.
 
 **Not on this path, by design:** `GMAIL_SEND_DRAFT`, `GMAIL_REPLY_TO_THREAD`, `OUTLOOK_SEND_DRAFT`,
-any delete or spam call. The owner sends. Gmail *filters* need the `gmail.settings.basic` scope,
-which a connection may or may not carry. Test read-only first with `GMAIL_LIST_FILTERS`: if it
-returns the filter list, `GMAIL_CREATE_FILTER` will work on that connection (still ask the owner
-before creating one, since a filter is standing configuration); if it returns 403, use
-`/mailsort:rules` to export an import file instead.
+any delete or spam call. The owner sends. Gmail *filters*: `GMAIL_LIST_FILTERS` works with the
+ordinary mail scope, but `GMAIL_CREATE_FILTER` needs `gmail.settings.basic`, which many connections
+lack (403 `ACCESS_TOKEN_SCOPE_INSUFFICIENT`). A successful list is **not** evidence that create will
+work. Treat `/mailsort:rules` (export an import file) as the default path; attempt a direct create
+only after the owner says yes, on a filter they actually want, and expect it may 403.
 
 Batch gotchas (both providers): a batch success response is acceptance-only and silently skips bad
 ids, so verify by re-querying; persist page tokens across pages or you re-process page 1 forever;

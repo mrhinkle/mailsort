@@ -64,3 +64,9 @@ Sections mirror the skills. Newest entry last within a section.
   draft the template, flag the extra question for the owner; never invent the answer
 - 2026-11-01 | a form type with no rule → propose a rule row with status draft instead of drafting
   ad hoc | ad hoc drafts are not auditable and never become a rule
+
+## Multiple runs per day
+
+- 2026-11-01 | before creating any draft, read the shared memory (or the log) for runs earlier the
+  same day → a thread an earlier run flagged for the owner is never drafted by a later run | two
+  runs disagreed on a form whose sender domain did not match its name; the second one drafted it

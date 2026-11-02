@@ -83,3 +83,5 @@ Sections mirror the skills. Newest entry last within a section.
 - 2026-11-01 | when the owner asks for drafts on never-unattended topics (pricing, commitments),
   draft the words and leave the number or the date as a `[TK: ...]` → the decision stays theirs
   while the typing is done
+2026-11-01 | a draft was written for a sender the owner had already answered, from a second mailbox, on a scheduling-tool thread (calendar booking) → S2 "loop still open?" must search sent mail to the sender's address across every owned mailbox with no thread filter, and count a booking or scheduling thread as a reply | a same-thread check saw only the unanswered original; the answer lived on another thread in another mailbox
+2026-11-01 | after drafting, re-check "already answered?" as a separate pass: fetch each drafted thread, then search sent mail to each counterpart across all mailboxes since their last message → report answered / still open per draft | one pass of parallel searches is cheap and catches replies that landed after the draft was written

@@ -53,13 +53,13 @@ Never write the ledger inside a repository, and never commit it.
      sent from another mailbox lands on a parallel thread).
    - A candidate counts as this draft's reply only if it went to the same primary recipient and
      one of these holds:
-     - the draft no longer exists;
-     - its text overlaps the draft (similarity ≥ 0.4 from a quick `draft_diff.py` check);
      - it is the owner's first reply to the same inbound message the draft answered (same thread
        and the inbound it follows, or its `In-Reply-To`/`References` name that message), which
-       catches a full rewrite like "No." sent while the draft survives;
+       catches a full rewrite like "No." whether or not the draft survives;
+     - its text overlaps the draft (similarity ≥ 0.4 from a quick `draft_diff.py` check);
      - the owner confirms it when asked.
-     Any other message sent while the draft still exists is not evidence; leave the row open.
+     A matching subject and recipient alone is never enough, and neither is the draft having been
+     deleted. Any other message is not evidence.
    - Matched → that body is `sent`.
    - No match anywhere and the draft no longer exists → `sent: null` (discarded).
    - No match and the draft still exists → leave it open; if older than 72 hours, report it as stale.

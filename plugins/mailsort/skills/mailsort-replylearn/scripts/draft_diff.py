@@ -33,13 +33,18 @@ QUOTE = re.compile(
 SIGNOFF = re.compile(
     r"(?i)^(best|thanks|thank you|thx|regards|best regards|cheers|warmly|talk soon)\b[^\n]{0,20}$"
 )
-GREETING = re.compile(r"^(hi|hey|hello|dear|good (morning|afternoon))\b[^\n,]{0,30},?|^[A-Z][\w'-]+,$", re.I)
+GREETING = re.compile(r"^(?i:hi|hey|hello|dear|good (?:morning|afternoon))\b[^\n,]{0,30},?|^[A-Z][\w'-]+,(?=\s|$)")
 
 
 def clean(text, sig_patterns):
     if not text:
         return ""
     t = text.replace("\r", "")
+    # Client-inserted HTML signature and quote containers (Gmail, Apple Mail, Outlook).
+    cut_at = [i for i in (t.find('class="gmail_signature"'), t.find('class="gmail_quote"'),
+                          t.find('id="Signature"'), t.find("<blockquote")) if i >= 0]
+    if cut_at:
+        t = t[: t.rfind("<", 0, min(cut_at)) if t.rfind("<", 0, min(cut_at)) >= 0 else min(cut_at)]
     if "<" in t and ">" in t and re.search(r"(?i)</?(p|div|br|html|body)\b", t):
         t = re.sub(r"(?is)<(script|style|head).*?</\1>", "", t)
         t = re.sub(r"(?i)<br\s*/?>|</p>|</div>|</li>", "\n", t)

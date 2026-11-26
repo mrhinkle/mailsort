@@ -88,7 +88,8 @@ Never write the ledger inside a repository, and never commit it.
    - A changed greeting or sign-off on two or more drafts replaces the audience's default.
    - `discarded` twice for the same kind of thread means "don't draft these"; propose it as a stop
      rule for `mailsort-draftreply`.
-   - Never copy third-party names, addresses, amounts or private facts into a rule.
+   - Never copy third-party names, addresses, amounts or private facts (health, family, legal,
+     money) into a rule.
 5. Append each rule to the audience file's `## Learned` section as
    `YYYY-MM-DD | (n) signal → rule | evidence: <draft ids>`. Count evidence by distinct draft id: a
    draft id already listed as evidence on that rule adds nothing, so a retried run never inflates
@@ -113,7 +114,10 @@ When a deployment has no style files yet:
    Agent-written mail is evidence of **what to avoid**, never of the owner's style.
 4. Per audience, from owner-typed mail only: greeting counts, sign-off counts, **body word count
    median and 75th percentile without the signature**, structure, 4–7 concrete moves, and 2–3 short
-   examples with every name, company, address and amount replaced by a placeholder.
+   examples with every name, company, address and amount replaced by a placeholder. Pick examples
+   only from routine business replies: never one that mentions health, family, money trouble, legal
+   matters, religion, politics or anything the owner would not say to a stranger, even redacted. If
+   no routine reply exists for an audience, leave Examples empty.
 5. Write one file per audience from `references/reply-style-template.md`. Show the owner the length
    table before anything else; it is usually the biggest correction.
 

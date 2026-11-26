@@ -116,7 +116,9 @@ def compare(item, sig_patterns):
     dw = len(draft.split())
     out["draft_words"] = dw
     if sent_raw is None:
-        out.update(verdict="discarded", sent_words=0)
+        out.update(verdict="discarded", sent_words=0, length_ratio=None, similarity=None,
+                   greeting=[greeting(draft), None], signoff=[signoff(draft), None],
+                   removed=[], added=[])
         return out
     sent = clean(sent_raw, sig_patterns)
     sw = len(sent.split())

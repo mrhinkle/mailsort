@@ -1,5 +1,17 @@
 # Changelog
 
+## 1.2.0 — 2026-11-26
+
+- New `mailsort-replylearn` skill and `/mailsort:learn` command: diffs each saved draft against
+  the reply the owner actually sent (`scripts/draft_diff.py`, deterministic, no network) and writes
+  dated, evidence-counted rules into per-audience style files in the override layer.
+  `--bootstrap` builds those files from 90–120 days of sent mail.
+- New `skills/mailsort/references/reply-style-template.md`: the shape of an audience style file
+  (length budget, shape, moves, avoid, examples, learned).
+- `mailsort-draftreply` loads the audience style file before writing, treats its length budget as a
+  ceiling (default under 60 words without one), and records every saved draft in a draft ledger.
+- Length budgets come from the owner's sent mail with signatures stripped.
+
 ## 1.1.0 — 2026-11-01
 
 - `mailsort-draftreply` gains a **Draft audit** procedure for existing drafts: SUPERSEDED, EMPTY,

@@ -133,7 +133,7 @@ aggregate-only senders, tools that own labels, and the append-only dated learned
 
 Installed as a plugin, the family is driven by slash commands: `/mailsort:help` (menu),
 `/mailsort:setup`, `/mailsort:triage`, `/mailsort:needsreply`, `/mailsort:draft`, `/mailsort:brief`,
-`/mailsort:sweep`, `/mailsort:rules`. Each command loads the right subskill and this core.
+`/mailsort:sweep`, `/mailsort:rules`, `/mailsort:learn`. Each command loads the right subskill and this core.
 
 ## Run
 

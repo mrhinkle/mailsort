@@ -41,10 +41,19 @@ def clean(text, sig_patterns):
         return ""
     t = text.replace("\r", "")
     # Client-inserted HTML signature and quote containers (Gmail, Apple Mail, Outlook).
-    cut_at = [i for i in (t.find('class="gmail_signature"'), t.find('class="gmail_quote"'),
-                          t.find('id="Signature"'), t.find("<blockquote")) if i >= 0]
-    if cut_at:
-        t = t[: t.rfind("<", 0, min(cut_at)) if t.rfind("<", 0, min(cut_at)) >= 0 else min(cut_at)]
+    # Attribute markers cut at the start of the tag that carries them; a <blockquote> cuts at itself,
+    # so reply text in the same container survives.
+    cuts = []
+    for marker in ('class="gmail_signature"', 'class="gmail_quote"', 'id="Signature"'):
+        i = t.find(marker)
+        if i >= 0:
+            j = t.rfind("<", 0, i)
+            cuts.append(j if j >= 0 else i)
+    i = t.lower().find("<blockquote")
+    if i >= 0:
+        cuts.append(i)
+    if cuts:
+        t = t[: min(cuts)]
     if "<" in t and ">" in t and re.search(r"(?i)</?(p|div|br|html|body)\b", t):
         t = re.sub(r"(?is)<(script|style|head).*?</\1>", "", t)
         t = re.sub(r"(?i)<br\s*/?>|</p>|</div>|</li>", "\n", t)
@@ -75,7 +84,9 @@ def first_line(t):
 def greeting(t):
     fl = first_line(t)
     m = GREETING.match(fl)
-    return m.group(0).strip() if m else "none"
+    if not m or re.match(r"(?i)(thanks|thank|thx|yes|no|ok|okay|sure|sorry|great|perfect)\b", fl):
+        return "none"
+    return m.group(0).strip()
 
 
 def signoff(t):
@@ -93,7 +104,8 @@ def sentences(t):
 
 
 def norm(s):
-    return re.sub(r"[^a-z0-9 ]", "", s.lower())
+    # Keep letters and digits in any script; drop punctuation and underscores.
+    return re.sub(r"[^\w ]|_", "", s.lower())
 
 
 def compare(item, sig_patterns):

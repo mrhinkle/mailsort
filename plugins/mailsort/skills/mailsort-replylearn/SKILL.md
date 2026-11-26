@@ -37,18 +37,39 @@ After a draft is saved and read back, append one line to the ledger:
  "created": "<ISO-8601>", "to": "...", "body": "<exact body saved>", "status": "open"}
 ```
 
+If a row for the same `draft_id` is already `open` (the draft was updated, not created), set the
+older row's `status` to `superseded` in the same write. Only the latest body for a draft is ever
+compared, so one edit is never counted twice.
+
 Never write the ledger inside a repository, and never commit it.
 
 ## 2. Learn (`/mailsort:learn`)
 
-1. Load the ledger; keep rows with `status: open` older than 2 hours.
-2. For each row, fetch the thread from its mailbox (and the owner's other mailboxes if overrides say
-   replies can come from there). Find the first message **from the owner** created after `created`.
-   - Found → that body is `sent`.
-   - Not found and the draft no longer exists → `sent: null` (discarded).
-   - Not found and the draft still exists → leave it open; if older than 72 hours, report it as stale.
-3. Run `scripts/draft_diff.py` once over the batch, passing the signature patterns with
-   `--sig-start`. It returns a verdict per draft (`unchanged`, `light_edit`, `heavy_edit`,
+1. Load the ledger; keep rows with `status: open` older than 2 hours. If two open rows share a
+   `draft_id`, keep the latest and mark the others `superseded` before going on.
+2. For each row, look for the reply the owner sent **in place of this draft**:
+   - Search the draft's thread, then every owned mailbox in the sent-mail locations for a message
+     from the owner created after `created` to the same recipients on the same subject (a reply
+     sent from another mailbox lands on a parallel thread).
+   - A candidate counts as this draft's reply only if it went to the same primary recipient and
+     either the draft no longer exists or its text overlaps the draft (similarity ≥ 0.4 from a
+     quick `draft_diff.py` check). A different message sent while the draft still exists is not
+     evidence; leave the row open.
+   - Matched → that body is `sent`.
+   - No match anywhere and the draft no longer exists → `sent: null` (discarded).
+   - No match and the draft still exists → leave it open; if older than 72 hours, report it as stale.
+3. Build the script input from the ledger rows, mapping the fields exactly:
+
+   | `draft_diff.py` field | from |
+   |---|---|
+   | `id` | ledger `draft_id` |
+   | `audience` | ledger `audience` |
+   | `draft` | ledger `body` |
+   | `sent` | the matched reply body from step 2, or `null` when discarded |
+
+   Rows left open in step 2 are not passed. Run `scripts/draft_diff.py` once over the batch, passing
+   the signature patterns with `--sig-start`. Any result with `id: null` means the mapping is wrong:
+   stop and write nothing. It returns a verdict per draft (`unchanged`, `light_edit`, `heavy_edit`,
    `rewrite`, `discarded`), length ratio, greeting and sign-off before/after, and the sentences
    removed and added.
 4. Turn results into rules. **Write the rule, not the instance**:
@@ -64,8 +85,12 @@ Never write the ledger inside a repository, and never commit it.
      rule for `mailsort-draftreply`.
    - Never copy third-party names, addresses, amounts or private facts into a rule.
 5. Append each rule to the audience file's `## Learned` section as
-   `YYYY-MM-DD | (n) signal → rule | evidence: <draft ids>`. Mark the ledger rows `learned` with the
-   verdict.
+   `YYYY-MM-DD | (n) signal → rule | evidence: <draft ids>`. Count evidence by distinct draft id: a
+   draft id already listed as evidence on that rule adds nothing, so a retried run never inflates
+   `(n)`. If the rule already exists, update its count and evidence list in place instead of adding
+   a line. Then mark the ledger rows `learned` with the verdict. A run that stopped between the two
+   writes is finished by running again: rows whose draft ids already appear as evidence are marked
+   `learned` without being counted.
 6. Report one table: audience, drafts, unchanged / edited / rewritten / discarded, median length
    ratio, and the rules added. Then the stale drafts by name and age.
 

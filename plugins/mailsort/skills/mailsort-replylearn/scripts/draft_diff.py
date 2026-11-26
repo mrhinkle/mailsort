@@ -26,6 +26,7 @@ import difflib
 import json
 import re
 import sys
+import unicodedata
 
 QUOTE = re.compile(
     r"(?m)^(On .{5,200}wrote:|-{2,}\s*Original Message|From: .+\nSent: |_{5,}|-{5,} Forwarded)"
@@ -104,8 +105,8 @@ def sentences(t):
 
 
 def norm(s):
-    # Keep letters and digits in any script; drop punctuation and underscores.
-    return re.sub(r"[^\w ]|_", "", s.lower())
+    # Keep letters, combining marks and digits in any script, and spaces; drop everything else.
+    return "".join(c for c in s.lower() if c == " " or unicodedata.category(c)[0] in "LMN")
 
 
 def compare(item, sig_patterns):
@@ -119,11 +120,11 @@ def compare(item, sig_patterns):
         return out
     sent = clean(sent_raw, sig_patterns)
     sw = len(sent.split())
-    sim = difflib.SequenceMatcher(None, norm(draft), norm(sent)).ratio()
+    sim = difflib.SequenceMatcher(None, norm(draft), norm(sent), autojunk=False).ratio()
     ds, ss = sentences(draft), sentences(sent)
     dn, sn = {norm(s) for s in ds}, {norm(s) for s in ss}
-    removed = [s for s in ds if norm(s) not in sn and max((difflib.SequenceMatcher(None, norm(s), x).ratio() for x in sn), default=0) < 0.6]
-    added = [s for s in ss if norm(s) not in dn and max((difflib.SequenceMatcher(None, norm(s), x).ratio() for x in dn), default=0) < 0.6]
+    removed = [s for s in ds if norm(s) not in sn and max((difflib.SequenceMatcher(None, norm(s), x, autojunk=False).ratio() for x in sn), default=0) < 0.6]
+    added = [s for s in ss if norm(s) not in dn and max((difflib.SequenceMatcher(None, norm(s), x, autojunk=False).ratio() for x in dn), default=0) < 0.6]
     if sim >= 0.97:
         verdict = "unchanged"
     elif sim >= 0.8:

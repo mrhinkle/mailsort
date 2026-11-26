@@ -23,10 +23,11 @@ you say so in chat. Unread is not a queue; categories and reply history decide.
 5. `/mailsort:brief` — the morning brief: schedule, can't-wait mail, priority list.
 6. `/mailsort:sweep <dead-archive|by-sender|digests> [mailbox]` — backlog cleanup in bulk, with before/after counts.
 7. `/mailsort:rules [gmail|outlook]` — export your learned rules as an importable filter file so routing happens client-side.
-8. Categories — explain the ten categories and the decision order.
-9. Safety — what mailsort will never do, and why drafting is allowed but sending is not.
-10. Adapters — Composio (recommended) versus native connectors, and what each can write.
+8. `/mailsort:learn [--bootstrap]` — learn your reply style from the edits you make to drafts; `--bootstrap` builds style files from your sent mail.
+9. Categories — explain the ten categories and the decision order.
+10. Safety — what mailsort will never do, and why drafting is allowed but sending is not.
+11. Adapters — Composio (recommended) versus native connectors, and what each can write.
 
-When the user replies with a number 1–7, run that command with no arguments (ask for a mailbox only
-if the override layer lists more than one). For 8–10, answer from `SKILL.md` and
+When the user replies with a number 1–8, run that command with no arguments (ask for a mailbox only
+if the override layer lists more than one). For 9–11, answer from `SKILL.md` and
 `references/adapters.md` in under 25 lines, then show the menu again.

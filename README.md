@@ -52,6 +52,7 @@ instead ship a private plugin whose skill declares `mailsort override layer: yes
 | `/mailsort:draft [thread\|all]` | Context-checked reply drafts, saved to Drafts, never sent |
 | `/mailsort:brief [--email]` | Morning brief: BLUF, schedule, can't-wait mail, priorities |
 | `/mailsort:sweep <mode> [mailbox]` | Backlog cleanup in bulk with before/after counts |
+| `/mailsort:learn [--bootstrap]` | Learn reply style from your edits to drafts; bootstrap per-audience style files from sent mail |
 | `/mailsort:rules [gmail\|outlook]` | Export learned rules as an importable filter file |
 
 ## The ten categories
@@ -81,7 +82,7 @@ PR.
 plugins/mailsort/
   skills/mailsort/            core: adapter contract, categories, decision order, overrides
   skills/mailsort-*/          one skill per category, plus draftreply, briefing, devreport,
-                              contentreport, contacts, setup, rules, sweep
+                              contentreport, contacts, setup, rules, sweep, replylearn
   commands/                   the eight slash commands
 ```
 

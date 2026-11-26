@@ -10,8 +10,7 @@
   (length budget, shape, moves, avoid, examples, learned).
 - `mailsort-draftreply` loads the audience style file before writing, treats its length budget as a
   ceiling (default under 60 words without one), and records every saved draft in a draft ledger.
-- Lesson from the first bootstrap: the owner's own replies were several times shorter than agent
-  drafts to the same audiences, so length budgets come from sent mail, signature stripped.
+- Length budgets come from the owner's sent mail with signatures stripped.
 
 ## 1.1.0 — 2026-11-01
 
